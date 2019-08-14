@@ -8,11 +8,14 @@ class Instructor::CoursesController < ApplicationController
 
   def create
     @course = current_user.courses.create(course_params)
-    redirect_to instructor_course_path(@course)
+    if @course.valid?
+      redirect_to instructor_course_path(@course)
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def show
-  
   end
 
   private
@@ -23,13 +26,12 @@ class Instructor::CoursesController < ApplicationController
     end
   end
 
-helper_method :current_course
+  helper_method :current_course
   def current_course
     @current_course ||= Course.find(params[:id])
   end
 
-
   def course_params
-    params.require(:course).permit(:title, :description, :cost)
+    params.require(:course).permit(:title, :description, :cost, :image)
   end
 end

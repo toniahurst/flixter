@@ -1,23 +1,20 @@
 <script>
+$(function() {
+  $('.new-lesson-button').click(function( event ) {
+    var lessonUrl = $( event.target).data('lesson-url');
+    $('#newLessonForm').attr('action', lessonUrl);
+  });
 
-  $(function() {
-    $('.new-lesson-button').click(function( event ) {
-  var lessonUrl = $( event.target).data('lesson-url');
-  $('#newLessonForm').attr('action', lessonUrl);
-});
-  })
-  $(function() {
-    $('.lessons').sortable({
-      update: function( event, ui ) {
-        $.ajax({
-          type: 'PUT',
-          url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { lesson: { row_order_position: ui.item.index() } }
-        });
-      }
-    });
-   });
+  $('.lessons').sortable({
+    update: function( event, ui ) {
+      $.ajax({
+        type: 'PUT',
+        url: ui.item.data('update-url'),
+        dataType: 'json',
+        data: { lesson: { row_order_position: ui.item.index() } }
+      });
+    }
+  });
 
   $(' .sections').sortable({
     update: function( event, ui ) {
@@ -26,9 +23,10 @@
         url: ui.item.data('update-url'),
         dataType: 'json'
         data: { section: { row_order_posiiton: ui.item.index() } }
-        )}
+      })
     }
   })
+})
 </script>
 
   <br />
@@ -57,13 +55,12 @@
 <button type="button" class="btn btn-primary btn-lg float-right new-lesson-button" data-toggle="modal" data-target="#newLessonModal" data-lesson-url="<%=instructor_section_lessons_path(section) %>">
   New Lesson...
 </button>
-          <br class="clr" />
-          <br class="clr" />
-
-          <ul class="lessons">
-            <% section.lessons.rank(:row_order).each do |lesson| %>
-              <li data-update-url="<%= instructor_lesson_path(lesson) %>">
-                <div class="row">
+  <br class="clr" />
+  <br class="clr" />
+  <ul class="lessons">
+    <% section.lessons.rank(:row_order).each do |lesson| %>
+      <li data-update-url="<%= instructor_lesson_path(lesson) %>">
+       <div class="row">
                   <div class="col-1">
                     <br />
                     <span class="fa fa-ellipsis-v"></span>
